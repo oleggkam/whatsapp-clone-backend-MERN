@@ -1,7 +1,9 @@
 # whatsapp-backend
 
+# Stack:
+
 # node.js
 
-# mongo.db
+# mongoDB
 
 # express.js
