@@ -2,7 +2,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Messages from './dbMessages.js';
-import Pusher from 'Pusher';
+import Pusher from 'pusher';
 
 //2:58
 
@@ -20,6 +20,7 @@ var pusher = new Pusher({
 
 // middleware
 app.use(express.json());
+
 // DB config
 const connection_url =
   'mongodb+srv://admin:5PviHlzagY4NLOyc@cluster0.k8sh9.mongodb.net/whatsapp-clone?retryWrites=true&w=majority';
@@ -31,15 +32,20 @@ mongoose.connect(connection_url, {
 });
 
 const db = mongoose.connection;
-
 db.once('open', () => {
   console.log('DB is connected');
+});
+const msgCollection = db.collection('messagecontents');
+
+const changeStream = msgCollection.watch(); //pusher usage
+changeStream.on('change', (next) => {
+  // process next document
 });
 
 // ???
 
 // api route
-app.get('/', (req, res) => res.status(200).send('Hello world'));
+//app.get('/', (req, res) => res.status(200).send('Hello world'));
 
 app.get('/messages/sync', (req, res) => {
   Messages.find((err, data) => {
